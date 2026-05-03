@@ -32,3 +32,8 @@ No build tools or dependencies required.
 - User library view
 - Transaction history
 - User selection / authentication
+
+---
+
+## Preview
+![Game Library UI](screenshots/build-2026-05-03.png)
