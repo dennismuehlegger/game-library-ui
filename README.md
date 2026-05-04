@@ -35,5 +35,5 @@ No build tools or dependencies required.
 
 ---
 
-## Preview
+## Preview (WIP)
 ![Game Library UI](screenshots/build-2026-05-03.png)
