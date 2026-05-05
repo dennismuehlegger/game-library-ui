@@ -1,6 +1,6 @@
 const API_BASE = "http://localhost:8080";
-
 let userId = document.getElementById("users").value; // todo - auth
+let toastTimeout;
 
 function fetchGames() {
     fetch(`${API_BASE}/games`)
@@ -15,17 +15,24 @@ function fetchUsers() {
         .then(users => renderUsers(users))
         .catch(err => console.error("Failed to fetch users:", err));
 }
-
+// todo - tabs
 function buyGame(gameId){
 const userId = document.getElementById("users").value;
      fetch(`${API_BASE}/users/${userId}/games/${gameId}/buy`, {
              method: "POST"
          })
+         .then(res => res.json())
          .then(res => {
-             if (res.ok) {
-                 alert("Game bought successfully");
-             } else {
-                 alert("Purchase failed");
+             if (res === "SUCCESS") {
+                 showToast("Game purchased successfully!", "success");
+             } else if (res === "INSUFFICIENT_FUNDS") {
+                 showToast("Not enough funds!", "error");
+             }
+             else if (res === "GAME_ALREADY_OWNED") {
+                 showToast("You already own this game!", "error");
+             }
+             else if (res === "USER_OR_GAME_NOT_FOUND") {
+                 showToast("User or game not found!", "error");
              }
          })
 }
@@ -56,6 +63,17 @@ function renderUsers(users) {
         <option value=${user.id}>${user.username}</option>
     `;
     });
+}
+
+function showToast(message, type) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = `${type} show`;
+
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
 }
 
 fetchGames();

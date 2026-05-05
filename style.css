@@ -15,6 +15,30 @@ header h1 {
     margin-bottom: 2rem;
 }
 
+#toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#toast.success {
+    background: #0b7a09;
+}
+
+#toast.error {
+    background: #ad1a0a;
+}
+
+#toast.show {
+    opacity: 1;
+}
+
 #game-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
