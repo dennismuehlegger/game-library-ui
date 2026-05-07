@@ -5,16 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Library</title>
     <link rel="stylesheet" href="style.css">
+
+    <label for="users">Choose a user:</label>
+    <select name="users" id="users"></select>
 </head>
 <body>
 <header>
-    <h1>Game Library</h1>
+    <h1>Game Library Tool</h1>
 </header>
 
-<div id="toast"></div>
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Market Place')">Market Place</button>
+    <button class="tablinks" onclick="openTab(event, 'Game Library')">Game Library</button>
+    <button class="tablinks" onclick="openTab(event, 'Transaction History')">Transaction History</button>
+</div>
 
-<label for="users">Choose a user:</label>
-<select name="users" id="users"></select>
+<div id="Market Place" class="tabcontent">
+    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+    <h3>Market Place</h3>
+</div>
+
+<div id="Game Library" class="tabcontent">
+    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+    <h3>Game Library</h3>
+</div>
+
+<div id="Transaction History" class="tabcontent">
+    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+    <h3>Transaction History</h3>
+</div>
+
+<div id="toast"></div>
 
 <main>
     <section id="game-browser">

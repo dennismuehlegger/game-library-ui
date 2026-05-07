@@ -16,6 +16,7 @@ function fetchUsers() {
         .catch(err => console.error("Failed to fetch users:", err));
 }
 // todo - tabs
+// todo - switch case
 function buyGame(gameId){
 const userId = document.getElementById("users").value;
      fetch(`${API_BASE}/users/${userId}/games/${gameId}/buy`, {
@@ -35,6 +36,23 @@ const userId = document.getElementById("users").value;
                  showToast("User or game not found!", "error");
              }
          })
+}
+
+function getTransactionHistory() {
+const userId = document.getElementById("users").value;
+    fetch(`${API_BASE}/users/${userId}/history`, {
+        method: "GET"
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res === "SUCCESS") {
+            // todo - render transactions
+        } else if (res === "NO_HISTORY") {
+            showToast("No games in library!", "error");
+        } else if (res === "NO_USER") {
+            showToast("No user found!", "error");
+        }
+    });
 }
 
 function renderGames(games) {
@@ -76,5 +94,36 @@ function showToast(message, type) {
     }, 3000);
 }
 
-fetchGames();
 fetchUsers();
+
+// todo - tabs need to be properly implemented.
+function openTab(evt, cityName) {
+  var i, tabcontent, tablinks;
+
+  switch (cityName) {
+        case "Market Place":
+            fetchGames();
+            break;
+        case "Game Library":
+            // todo - implement fetching owned games
+            break;
+        case "Transaction History":
+            getTransactionHistory();
+            break;
+        default:
+            showToast("Something went wrong.", "error");
+    }
+
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
