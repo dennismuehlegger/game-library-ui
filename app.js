@@ -16,6 +16,17 @@ function fetchUsers() {
         .catch(err => console.error("Failed to fetch users:", err));
 }
 
+function fetchFunds(){
+const userId = document.getElementById("users").value;
+    fetch(`${API_BASE}/users/${userId}`, {
+        method: "GET"
+    })
+    .then(res => res.json())
+    .then(res => {
+        document.getElementById("funds-amount").textContent = res.funds;
+    })
+}
+
 function buyGame(gameId){
     const userId = document.getElementById("users").value;
     fetch(`${API_BASE}/users/${userId}/games/${gameId}/buy`, {
@@ -26,6 +37,7 @@ function buyGame(gameId){
         switch (res) {
             case "SUCCESS":
                 showToast("Game purchased successfully!", "success");
+                fetchFunds();
                 break;
             case "INSUFFICIENT_FUNDS":
                 showToast("Not enough funds!", "error");
@@ -137,6 +149,7 @@ function renderUsers(users) {
         <option value=${user.id}>${user.username}</option>
     `;
     });
+    fetchFunds();
 }
 
 function renderTransactionHistory(transactions) {
@@ -165,7 +178,6 @@ function showToast(message, type) {
 
 fetchUsers();
 
-// todo - tabs need to be properly implemented.
 function openTab(evt, cityName) {
   var i, tabcontent, tablinks;
 
