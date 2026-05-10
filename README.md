@@ -35,5 +35,5 @@ No build tools or dependencies required.
 
 ---
 
-## Preview (WIP)
+## Preview
 ![Game Library UI](screencapture/demo.gif)
