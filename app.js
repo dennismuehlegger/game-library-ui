@@ -15,7 +15,6 @@ function fetchUsers() {
         .then(users => renderUsers(users))
         .catch(err => console.error("Failed to fetch users:", err));
 }
-// todo - tabs
 // todo - switch case
 function buyGame(gameId){
 const userId = document.getElementById("users").value;
@@ -45,14 +44,23 @@ const userId = document.getElementById("users").value;
     })
     .then(res => res.json())
     .then(res => {
-        if (res === "SUCCESS") {
-            // todo - render transactions
-        } else if (res === "NO_HISTORY") {
-            showToast("No games in library!", "error");
-        } else if (res === "NO_USER") {
+        if (res.result === "SUCCESS") {
+            renderTransactionHistory(res.transactions);
+        } else if (res.result === "NO_HISTORY") {
+            showToast("No transaction history!", "error");
+        } else if (res.result === "NO_USER") {
             showToast("No user found!", "error");
         }
     });
+}
+
+function getOwnedGames() {
+const userId = document.getElementById("users").value;
+    fetch(`${API_BASE}/users/${userId}`, {
+        method: "GET"
+    })
+    .then(res => res.json())
+    .then(res => renderOwnedGames(res.libraries));
 }
 
 function renderGames(games) {
@@ -73,6 +81,24 @@ function renderGames(games) {
     });
 }
 
+
+function renderOwnedGames(games) {
+console.log(games)
+    const container = document.getElementById("owned-game-list");
+    container.innerHTML = "";
+
+    games.forEach(game => {
+        const card = document.createElement("div");
+        card.classList.add("game-card");
+        card.innerHTML = `
+            <img src="${game.game.coverArtUrl}" alt="${game.game.name}">
+            <h3>${game.game.name}</h3>
+            <p>${game.game.releaseYear}</p>
+        `;
+        container.appendChild(card);
+    });
+}
+
 function renderUsers(users) {
     const container = document.getElementById("users");
     container.innerHTML = "";
@@ -80,6 +106,19 @@ function renderUsers(users) {
     container.innerHTML += `
         <option value=${user.id}>${user.username}</option>
     `;
+    });
+}
+
+function renderTransactionHistory(transactions) {
+    const container = document.getElementById("transaction-list");
+    container.innerHTML = "";
+
+    transactions.forEach(transaction => {
+        const p = document.createElement("p");
+        const game = transaction.gameName;
+        const msg = `Purchased ${game} for ${transaction.price}€`;
+        p.textContent = msg;
+        container.appendChild(p);
     });
 }
 
@@ -105,7 +144,7 @@ function openTab(evt, cityName) {
             fetchGames();
             break;
         case "Game Library":
-            // todo - implement fetching owned games
+            getOwnedGames();
             break;
         case "Transaction History":
             getTransactionHistory();

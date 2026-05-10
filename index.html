@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Library</title>
     <link rel="stylesheet" href="style.css">
-
-    <label for="users">Choose a user:</label>
-    <select name="users" id="users"></select>
 </head>
 <body>
 <header>
     <h1>Game Library Tool</h1>
+    <div class="user-selector">
+        <label for="users">Choose a user:</label>
+        <select name="users" id="users"></select>
+    </div>
 </header>
 
 <div class="tab">
@@ -21,29 +22,18 @@
 </div>
 
 <div id="Market Place" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <h3>Market Place</h3>
+    <div id="game-list"></div>
 </div>
 
 <div id="Game Library" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <h3>Game Library</h3>
+    <div id="owned-game-list"></div>
 </div>
 
 <div id="Transaction History" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <h3>Transaction History</h3>
+    <div id="transaction-list"></div>
 </div>
 
 <div id="toast"></div>
-
-<main>
-    <section id="game-browser">
-        <h2>Browse Games</h2>
-        <div id="game-list"></div>
-    </section>
-</main>
-
 
 <script src="app.js"></script>
 </body>
