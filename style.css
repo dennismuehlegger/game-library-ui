@@ -86,6 +86,16 @@ header {
     transition: background 0.3s ease;
 }
 
+.play-button {
+    background: #3a86ff;
+    color: #000000;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
 .tab {
     display: flex;
     border-bottom: 2px solid #333;

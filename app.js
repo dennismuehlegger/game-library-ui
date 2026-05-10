@@ -15,41 +15,69 @@ function fetchUsers() {
         .then(users => renderUsers(users))
         .catch(err => console.error("Failed to fetch users:", err));
 }
-// todo - switch case
+
 function buyGame(gameId){
-const userId = document.getElementById("users").value;
-     fetch(`${API_BASE}/users/${userId}/games/${gameId}/buy`, {
-             method: "POST"
-         })
-         .then(res => res.json())
-         .then(res => {
-             if (res === "SUCCESS") {
-                 showToast("Game purchased successfully!", "success");
-             } else if (res === "INSUFFICIENT_FUNDS") {
-                 showToast("Not enough funds!", "error");
-             }
-             else if (res === "GAME_ALREADY_OWNED") {
-                 showToast("You already own this game!", "error");
-             }
-             else if (res === "USER_OR_GAME_NOT_FOUND") {
-                 showToast("User or game not found!", "error");
-             }
-         })
+    const userId = document.getElementById("users").value;
+    fetch(`${API_BASE}/users/${userId}/games/${gameId}/buy`, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(res => {
+        switch (res) {
+            case "SUCCESS":
+                showToast("Game purchased successfully!", "success");
+                break;
+            case "INSUFFICIENT_FUNDS":
+                showToast("Not enough funds!", "error");
+                break;
+            case "GAME_ALREADY_OWNED":
+                showToast("You already own this game!", "error");
+                break;
+            case "USER_OR_GAME_NOT_FOUND":
+                showToast("User or game not found!", "error");
+                break;
+        }
+    })
+}
+
+function playGame(gameId){
+    const userId = document.getElementById("users").value;
+    fetch(`${API_BASE}/users/${userId}/games/${gameId}/play`, {
+        method: "PUT"
+    })
+    .then(res => res.json())
+    .then(res => {
+        switch (res) {
+            case "SUCCESS":
+                getOwnedGames();
+                break;
+            case "USER_OR_GAME_NOT_FOUND":
+                showToast("User or game not found!", "error");
+                break;
+            case "GAME_NOT_OWNED":
+                showToast("Game not owned!", "error");
+                break;
+        }
+    })
 }
 
 function getTransactionHistory() {
-const userId = document.getElementById("users").value;
+    const userId = document.getElementById("users").value;
     fetch(`${API_BASE}/users/${userId}/history`, {
         method: "GET"
     })
     .then(res => res.json())
     .then(res => {
-        if (res.result === "SUCCESS") {
-            renderTransactionHistory(res.transactions);
-        } else if (res.result === "NO_HISTORY") {
-            showToast("No transaction history!", "error");
-        } else if (res.result === "NO_USER") {
-            showToast("No user found!", "error");
+        switch (res.result) {
+            case "SUCCESS":
+                renderTransactionHistory(res.transactions);
+                break;
+            case "NO_HISTORY":
+                showToast("No transaction history!", "error");
+                break;
+            case "NO_USER":
+                showToast("No user found!", "error");
+                break;
         }
     });
 }
@@ -83,7 +111,7 @@ function renderGames(games) {
 
 
 function renderOwnedGames(games) {
-console.log(games)
+    const userId = document.getElementById("users").value;
     const container = document.getElementById("owned-game-list");
     container.innerHTML = "";
 
@@ -93,7 +121,9 @@ console.log(games)
         card.innerHTML = `
             <img src="${game.game.coverArtUrl}" alt="${game.game.name}">
             <h3>${game.game.name}</h3>
+            <p>Hours played: ${game.hoursPlayed}</p>
             <p>${game.game.releaseYear}</p>
+            <button class="play-button" onclick="playGame(${game.game.id})">&#9654;</button>
         `;
         container.appendChild(card);
     });
