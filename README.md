@@ -14,6 +14,9 @@ A simple browser-based interface for the Game Library backend. Users can browse 
 - Browse games with cover art
 - Purchase games as a selected user
 - Toast notifications for purchase outcomes
+- User library view
+- Transaction history
+- Multiple tabs for marketplace, library, and history
 
 ---
 
@@ -27,13 +30,10 @@ No build tools or dependencies required.
 ---
 
 ## Planned Features
-- User library view
-- Transaction history
-- Multiple tabs for marketplace, library, and history
 - Sorting and filtering
 - User authentication
 
 ---
 
 ## Preview (WIP)
-![Game Library UI](screencapture/img.png)
+![Game Library UI](screencapture/demo.gif)
