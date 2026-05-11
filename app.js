@@ -9,6 +9,14 @@ function fetchGames() {
         .catch(err => console.error("Failed to fetch games:", err));
 }
 
+function fetchOwnedGames() {
+    const userId = document.getElementById("users").value;
+    fetch(`${API_BASE}/users/${userId}/library`)
+        .then(res => res.json())
+        .then(games => renderOwnedGames(games))
+        .catch(err => console.error("Failed to fetch games:", err));
+}
+
 function fetchUsers() {
     fetch(`${API_BASE}/users`)
         .then(res => res.json())
@@ -61,7 +69,7 @@ function playGame(gameId){
     .then(res => {
         switch (res) {
             case "SUCCESS":
-                getOwnedGames();
+                fetchOwnedGames();
                 break;
             case "USER_OR_GAME_NOT_FOUND":
                 showToast("User or game not found!", "error");
@@ -94,15 +102,6 @@ function getTransactionHistory() {
     });
 }
 
-function getOwnedGames() {
-const userId = document.getElementById("users").value;
-    fetch(`${API_BASE}/users/${userId}`, {
-        method: "GET"
-    })
-    .then(res => res.json())
-    .then(res => renderOwnedGames(res.libraries));
-}
-
 function renderGames(games) {
     const container = document.getElementById("game-list");
     container.innerHTML = "";
@@ -131,11 +130,11 @@ function renderOwnedGames(games) {
         const card = document.createElement("div");
         card.classList.add("game-card");
         card.innerHTML = `
-            <img src="${game.game.coverArtUrl}" alt="${game.game.name}">
-            <h3>${game.game.name}</h3>
+            <img src="${game.coverArtUrl}" alt="${game.name}">
+            <h3>${game.name}</h3>
             <p>Hours played: ${game.hoursPlayed}</p>
-            <p>${game.game.releaseYear}</p>
-            <button class="play-button" onclick="playGame(${game.game.id})">&#9654;</button>
+            <p>${game.releaseYear}</p>
+            <button class="play-button" onclick="playGame(${game.id})">&#9654;</button>
         `;
         container.appendChild(card);
     });
@@ -186,7 +185,7 @@ function openTab(evt, cityName) {
             fetchGames();
             break;
         case "Game Library":
-            getOwnedGames();
+            fetchOwnedGames();
             break;
         case "Transaction History":
             getTransactionHistory();
