@@ -40,22 +40,12 @@ function buyGame(gameId){
     fetch(`${API_BASE}/users/${userId}/games/${gameId}/buy`, {
         method: "POST"
     })
-    .then(res => res.json())
     .then(res => {
-        switch (res) {
-            case "SUCCESS":
-                showToast("Game purchased successfully!", "success");
-                fetchFunds();
-                break;
-            case "INSUFFICIENT_FUNDS":
-                showToast("Not enough funds!", "error");
-                break;
-            case "GAME_ALREADY_OWNED":
-                showToast("You already own this game!", "error");
-                break;
-            case "USER_OR_GAME_NOT_FOUND":
-                showToast("User or game not found!", "error");
-                break;
+        if (res.ok) {
+            showToast("Game purchased successfully!", "success");
+            fetchFunds();
+        } else {
+            res.text().then(message => showToast(message, "error"));
         }
     })
 }
@@ -65,20 +55,13 @@ function playGame(gameId){
     fetch(`${API_BASE}/users/${userId}/games/${gameId}/play`, {
         method: "PUT"
     })
-    .then(res => res.json())
     .then(res => {
-        switch (res) {
-            case "SUCCESS":
+            if (res.ok) {
                 fetchOwnedGames();
-                break;
-            case "USER_OR_GAME_NOT_FOUND":
-                showToast("User or game not found!", "error");
-                break;
-            case "GAME_NOT_OWNED":
-                showToast("Game not owned!", "error");
-                break;
-        }
-    })
+            } else {
+                res.text().then(message => showToast(message, "error"));
+            }
+        })
 }
 
 function getTransactionHistory() {
